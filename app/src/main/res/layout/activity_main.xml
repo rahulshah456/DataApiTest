@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,4 +15,42 @@
         android:layout_alignParentTop="true"
         android:scrollbars="vertical" />
 
-</android.support.constraint.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingRecyclerID"
+        android:layout_width="match_parent"
+        android:layout_height="20sp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="#00E676"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="682dp">
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/loadingTextID"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorPrimaryDark"
+            android:indeterminateTintMode="src_atop"
+            android:padding="2.5dp" />
+
+        <TextView
+            android:id="@+id/loadingTextID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Loading..."
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
