@@ -9,9 +9,9 @@ public interface DataAPI {
 
 
     String BASE_URL = "https://www.googleapis.com/youtube/v3/";
-    String API_KEY = "AIzaSyAuNTRdydXrc8_dDAlsduyaKjwkX1CfboA";
+    String API_KEY = "AIzaSyAXzGr9QZRqhTMQ3AbdaSkvcPkWMVHpmIs";
     String CHANNEL_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
-    String PLAYLIST_ID = "PLD7SPvDoEddZUrho5ynsBfaI7nqhaNN5c";
+    String PLAYLIST_ID = "PLWlUJU11tp4eh1sLw2VTuc5CuZDPNnsBr";
 
     @GET("search")
     Call<Example> listVideos(@Query("channelId") String channelId,

@@ -1,41 +1,47 @@
 package com.app.dataapitest;
 
-import android.support.annotation.Nullable;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.Playlist;
+import com.google.api.services.youtube.model.PlaylistListResponse;
 
-import API.APIService;
-import API.DataAPI;
-import Adapters.VideoListAdapter;
-import Modals.Example;
-import Modals.Item;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import Adapters.PlaylistAdapter;
+
+import static Utils.Constants.YOUTUBE_API_KEY;
+import static Utils.Constants.YOUTUBE_PLAYLISTS;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static List<Item> videoList;
     private RecyclerView recyclerView;
-    private VideoListAdapter listAdapter;
+    private PlaylistAdapter listAdapter;
     public String nextPageToken = "";
     Animation slide_down,slide_up;
     private RecyclerView.LayoutManager mLayoutManager;
     RelativeLayout loadingLayout;
     boolean isLoading = false;
+    private ArrayList<Playlist> mPlaylistList = new ArrayList<>();
+    private final GsonFactory mJsonFactory = new GsonFactory();
+    private final HttpTransport mTransport = AndroidHttp.newCompatibleTransport();
+    private YouTube mYoutubeDataApi;
 
 
     @Override
@@ -49,11 +55,13 @@ public class MainActivity extends AppCompatActivity {
         slide_down = AnimationUtils.loadAnimation(this, R.anim.slide_down);
         slide_up = AnimationUtils.loadAnimation(this, R.anim.slide_up);
 
-        generateRecyclerView();
+        mYoutubeDataApi = new YouTube.Builder(mTransport, mJsonFactory, null)
+                .setApplicationName(getResources().getString(R.string.app_name))
+                .build();
 
         loadingLayout.setVisibility(View.VISIBLE);
-        loadingLayout.startAnimation(slide_down);
-        GetVideoList("");
+        loadingLayout.startAnimation(slide_up);
+        new GetPlaylistTitlesAsyncTask(mYoutubeDataApi).execute(YOUTUBE_PLAYLISTS);
 
 
 
@@ -64,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
 
                 // Check if end of page has been reached
-                if( !isLoading && ((LinearLayoutManager)mLayoutManager).findLastVisibleItemPosition() == listAdapter.getItemCount()-1 ){
-                    isLoading = true;
-                    Log.d(TAG , "End has reached, loading more images!");
-                    loadingLayout.startAnimation(slide_up);
-                    loadingLayout.setVisibility(View.VISIBLE);
-                    GetVideoList(nextPageToken);
-                }
+//                if( !isLoading && ((LinearLayoutManager)mLayoutManager).findLastVisibleItemPosition() == listAdapter.getItemCount()-1 ){
+//                    isLoading = true;
+//                    Log.d(TAG , "End has reached, loading more images!");
+//                    loadingLayout.startAnimation(slide_up);
+//                    loadingLayout.setVisibility(View.VISIBLE);
+//                    GetVideoList(nextPageToken);
+//                }
             }
         });
 
@@ -79,81 +87,92 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void generateRecyclerView(){
+
         // Set up RecyclerView
-        videoList = new ArrayList<>();
         mLayoutManager = new GridLayoutManager(MainActivity.this, 1);
-        listAdapter = new VideoListAdapter(MainActivity.this);
+        listAdapter = new PlaylistAdapter(MainActivity.this,mPlaylistList);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
-    }
-
-
-    public void GetVideoList(String pageToken){
-
-        Call<Example> youtubeResponseCall = APIService.getInstance()
-                .listVideos(DataAPI.CHANNEL_ID,DataAPI.API_KEY,"snippet","date","IN","20",pageToken);
-
-//        youtubeResponseCall.enqueue(new Callback<Example>() {
-//            @Override
-//            public void onResponse(Call<Example> call, retrofit2.Response<Example> response) {
-//
-//                Example data = response.body();
-//                if(data!=null){
-//
-//                    nextPageToken = data.getNextPageToken();
-//                    Log.d("YoutubeAPI",String.valueOf(data.getNextPageToken()));
-//                    listAdapter.addVideos(data.getItems());
-//                    loadingLayout.setVisibility(View.INVISIBLE);
-//                    loadingLayout.startAnimation(slide_down);
-//
-//                }
-//
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Example> call, Throwable t) {
-//
-//                Log.d("YoutubeAPI", String.valueOf(t.getMessage()));
-//                Log.d("YoutubeAPI", String.valueOf(t.fillInStackTrace()));
-//
-//            }
-//        });
-
-
-        Call<Example> playlistResponseCall = APIService.getInstance()
-                .listPlaylist(DataAPI.PLAYLIST_ID,DataAPI.API_KEY,"snippet","date","US","20",pageToken);
-
-        playlistResponseCall.enqueue(new Callback<Example>() {
+        listAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
             @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
+            public void OnItemClick(int position) {
 
-                Example data = response.body();
-                if(data!=null){
-
-                    nextPageToken = data.getNextPageToken();
-                    Log.d("YoutubeAPI",String.valueOf(data.getNextPageToken()));
-                    listAdapter.addVideos(data.getItems());
-                    loadingLayout.setVisibility(View.INVISIBLE);
-                    loadingLayout.startAnimation(slide_down);
-
-                }
+                Intent intent = new Intent(MainActivity.this,PlaylistActivity.class);
+                intent.putExtra("Id",mPlaylistList.get(position).getId());
+                startActivity(intent);
 
             }
 
             @Override
-            public void onFailure(Call<Example> call, Throwable t) {
-
-                Log.d("YoutubeAPI", String.valueOf(t.getMessage()));
-                Log.d("YoutubeAPI", String.valueOf(t.fillInStackTrace()));
+            public void OnItemLongClick(int position) {
 
             }
         });
 
     }
 
+
+    public class GetPlaylistTitlesAsyncTask  extends AsyncTask<String[], Void, PlaylistListResponse> {
+
+
+        //see: https://developers.google.com/youtube/v3/docs/playlists/list
+        private static final String YOUTUBE_PLAYLIST_PART = "snippet";
+        private static final String YOUTUBE_PLAYLIST_FIELDS = "items(id,snippet(title),snippet(thumbnails))";
+
+        private YouTube mYouTubeDataApi;
+
+        public GetPlaylistTitlesAsyncTask(YouTube api) {
+            mYouTubeDataApi = api;
+        }
+
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //mProgressDialog.show();
+
+
+        }
+
+
+        @Override
+        protected PlaylistListResponse doInBackground(String[]... params) {
+
+            final String[] playlistIds = params[0];
+
+            PlaylistListResponse playlistListResponse;
+            try {
+                playlistListResponse = mYouTubeDataApi.playlists()
+                        .list(YOUTUBE_PLAYLIST_PART)
+                        .setId(TextUtils.join(",", YOUTUBE_PLAYLISTS))
+                        .setFields(YOUTUBE_PLAYLIST_FIELDS)
+                        .setKey(YOUTUBE_API_KEY)
+                        .execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return playlistListResponse;
+        }
+
+
+
+
+        @Override
+        protected void onPostExecute(PlaylistListResponse playlistListResponse) {
+
+            // if we didn't receive a response for the playlist titles, then there's nothing to update
+            if (playlistListResponse == null)
+                return;
+
+            mPlaylistList.addAll(playlistListResponse.getItems());
+            generateRecyclerView();
+            //mProgressDialog.hide();
+            loadingLayout.setVisibility(View.INVISIBLE);
+            loadingLayout.startAnimation(slide_down);
+        }
+    }
 
 
 

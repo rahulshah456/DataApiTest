@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="300dp"
+    android:layout_height="280dp"
     android:layout_width="match_parent"
     android:layout_marginLeft="18dp"
     android:layout_marginRight="18dp"
@@ -35,18 +35,18 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="40dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/playlist_icon"/>
+            android:background="@drawable/play_icon"/>
 
         <TextView
             android:id="@+id/titleTextID"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_below="@+id/video_thumbnailID"
             android:fontFamily="@font/montserrat"
             android:gravity="center|left"
             android:paddingStart="18dp"
             android:paddingLeft="5dp"
-            android:maxLines="3"
+            android:maxLines="2"
             android:textColor="#000000"
             android:textSize="14dp"
             android:text="Playlist Title" />
@@ -58,22 +58,26 @@
             android:layout_below="@+id/titleTextID">
 
 
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+            <TextView
+                android:id="@+id/viewsId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="18dp"
-                android:background="@drawable/bookmark_icon"/>
+                android:text="4K views"
+                android:textSize="12sp"/>
 
 
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+            <TextView
+                android:id="@+id/publishId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="80dp"
-                android:background="@drawable/share_icon"/>
+                android:layout_toEndOf="@+id/viewsId"
+                android:layout_marginStart="18dp"
+                android:text="4 hours ago"
+                android:textSize="12sp"/>
 
 
         </RelativeLayout>
