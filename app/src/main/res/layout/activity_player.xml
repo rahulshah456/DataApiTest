@@ -5,15 +5,305 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".PlayerActivity">
 
 
-    <view
-        android:id="@+id/playerId"
-        class="com.google.android.youtube.player.YouTubePlayerView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="wrap_content">
+
+        <view
+            android:id="@+id/playerId"
+            class="com.google.android.youtube.player.YouTubePlayerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+
+        <RelativeLayout
+            android:id="@+id/descLayoutId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/playerId">
+
+
+            <TextView
+                android:id="@+id/videoNameId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/montserrat"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="48dp"
+                android:textStyle="bold"
+                android:text="Sample video name with chapter description"/>
+
+            <RelativeLayout
+                android:id="@+id/statusId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_below="@+id/videoNameId">
+
+
+                <TextView
+                    android:id="@+id/viewsId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2,234 views"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_marginStart="10dp" />
+
+                <TextView
+                    android:id="@+id/publishId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15 hours ago"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_toEndOf="@+id/viewsId"
+                    android:layout_marginStart="48dp" />
+
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/toolsId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/statusId"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="18dp">
+
+
+                <RelativeLayout
+                    android:id="@+id/likeLayoutId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp">
+
+                    <RelativeLayout
+                        android:id="@+id/likeId"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/circle">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="6dp"
+                            android:src="@drawable/round_thumb_up"/>
+
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/likeCountId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2K"
+                        android:textSize="10sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/montserrat"
+                        android:layout_below="@+id/likeId"/>
+
+
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:id="@+id/dislikeLayoutId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_toEndOf="@+id/likeLayoutId">
+
+                    <RelativeLayout
+                        android:id="@+id/dislikeId"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/circle">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="6dp"
+                            android:src="@drawable/round_thumb_down"/>
+
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/dislikeCountId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2K"
+                        android:textSize="10sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/montserrat"
+                        android:layout_below="@+id/dislikeId"/>
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/downloadLayoutId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_toEndOf="@+id/dislikeLayoutId">
+
+
+                    <RelativeLayout
+                        android:id="@+id/downloadId"
+                        android:layout_width="34dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_height="34dp"
+
+                        android:background="@drawable/circle">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="6dp"
+                            android:src="@drawable/round_download"/>
+
+
+                    </RelativeLayout>
+
+
+
+                    <TextView
+                        android:id="@+id/downloadTextId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Download"
+                        android:textSize="10sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/montserrat"
+                        android:layout_below="@+id/downloadId"/>
+
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/shareLayoutId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_toEndOf="@+id/downloadLayoutId">
+
+
+                    <RelativeLayout
+                        android:id="@+id/shareId"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+
+                        android:background="@drawable/circle">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="6dp"
+                            android:src="@drawable/round_share"/>
+
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/shareTextId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share"
+                        android:textSize="10sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/montserrat"
+                        android:layout_below="@+id/shareId"/>
+
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+            <ScrollView
+                android:layout_below="@+id/toolsId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/descHeaderId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Video Description"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat"
+                        android:layout_marginStart="18dp"/>
+
+
+                    <TextView
+                        android:id="@+id/descId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginTop="8dp"
+                        android:autoLink="phone|web"
+                        android:layout_marginBottom="18dp"
+                        android:layout_below="@+id/descHeaderId"
+                        android:text="Basic video description here"
+                        android:fontFamily="@font/montserrat"/>
+
+
+                </RelativeLayout>
+
+
+            </ScrollView>
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+
 
 
 </FrameLayout>

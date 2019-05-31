@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
@@ -26,6 +27,7 @@ import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.PlaylistListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,7 +118,13 @@ public class PlaylistActivity extends AppCompatActivity {
             public void OnItemClick(int position) {
 
                 Intent intent = new Intent(PlaylistActivity.this,PlayerActivity.class);
-                intent.putExtra("Id",listAdapter.getItemList().get(position).getId());
+                intent.putExtra("id",listAdapter.getItemList().get(position).getId());
+                intent.putExtra("title", listAdapter.getItemList().get(position).getSnippet().getTitle());
+                intent.putExtra("description", listAdapter.getItemList().get(position).getSnippet().getDescription());
+                intent.putExtra("like", listAdapter.getItemList().get(position).getStatistics().getLikeCount().doubleValue());
+                intent.putExtra("dislike", listAdapter.getItemList().get(position).getStatistics().getDislikeCount().doubleValue());
+                intent.putExtra("views", listAdapter.getItemList().get(position).getStatistics().getViewCount().doubleValue());
+                intent.putExtra("duration", listAdapter.getItemList().get(position).getContentDetails().getDuration());
                 startActivity(intent);
 
             }
